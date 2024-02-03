@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Playlists</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            display: inline-block;
+        }
+     
+        main {
+            padding: 20px;
+            background: white;
+            margin: 20px auto;
+            width: 80%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        main p{
+            text-align: center;
+        }
+        main h1{
+            text-align: center;
+
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 8px;
+            margin-bottom: 10px;
+            background-color: #e9e9e9;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .playlist-info {
+            flex-grow: 1;
+        }
+        .button-group {
+            display: flex;
+            gap: 25px;
+        }
+        button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .view-button {
+            background-color: #4cb655;
+            color: white;
+        }
+        .add-button {
+            background-color: #007bff;
+            color: white;
+        }
+        .delete-button {
+            background-color: #ff6b6b;
+            color: white;
+        }
+        .flash-messages .alert {
+            background-color: #e7f3fe;
+            color: #e03140;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            text-align: center;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        header, footer {
+            background-color: #4cb69f;
+            color: white;
+            text-align: center;
+            padding: 0 0;
+        }     
+
+        .containers{
+            text-align: right;
+            margin: auto;
+            width: 80%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="containers">
+                <a href="{{ url_for('user_dashboard') }}">Home</a>
+                <a href="{{ url_for('create_playlist') }}">Create Playlist</a>
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <h1>Your Playlists</h1>
+        {% if playlists %}
+            <ul>
+                {% for playlist in playlists %}
+                    <li>
+                        <div class="playlist-info">
+                            {{ playlist.name }}
+                        </div>
+                        <div class="button-group">
+                            <form action="{{ url_for('show_playlist', playlist_id=playlist.id) }}" method="get">
+                                <button type="submit" class="view-button">View</button>
+                            </form>
+                            <form action="{{ url_for('add_songs_to_playlist', playlist_id=playlist.id) }}" method="get">
+                                <button type="submit" class="add-button">Add Songs</button>
+                            </form>
+                            <form action="{{ url_for('delete_playlist', playlist_id=playlist.id) }}" method="post">
+                                <button type="submit" class="delete-button">Delete</button>
+                            </form>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No playlists created yet.</p>
+        {% endif %}
+    </main>
+    <!-- Flash Messages Section -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for message in messages %}
+                    <div class="alert alert-info">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    <footer>
+        <p>&copy; Thanks for using our application. Have a great leisure time!</p>
+        <br>please feel free to write us : srinandhini82@gmail.com for any support or issue.
+    </footer>
+</body>
+</html>

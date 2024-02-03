@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+    
+        .container, .containers, main {
+            width: 80%;
+            margin: auto;
+            text-align: center;
+        }
+    
+        nav {
+            background-color: #4cb69f;
+            overflow: hidden;
+        }
+    
+        .containers {
+            text-align: right;
+            padding-right: 20px;
+        }
+    
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+    
+        nav a:hover {
+            background-color: #367c39;
+        }
+    
+        main {
+            padding: 30px;
+            background: white;
+            margin: 30px auto;
+            width: 80%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+    
+        .song-box {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 15px;
+            text-align: center;
+            display: inline-block;
+            width: 200px;
+            box-sizing: border-box;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-radius: 8px;
+        }
+    
+        .song-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+    
+        .song-thumbnail {
+            width: 100%;
+            height: auto;
+            border-bottom: 1px solid #ddd;
+        }
+    
+        .song-title {
+            margin-top: 15px;
+            font-size: 1.1em;
+        }
+    
+        .flash-messages .alert {
+            background-color: #e7f3fe;
+            color: #e03140;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            text-align: center;
+        }
+    
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+    
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+    
+        li {
+            margin-bottom: 15px;
+        }
+    
+        .genre-box, .album {
+        background-color: #fff;
+        color: #333;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        display: block; 
+        width: calc(50% - 40px); 
+        margin: 20px auto;
+    }
+
+    .genre-box h2, .album h2 {
+        color: #00070e;
+        margin-bottom: 15px;
+    }
+
+    .genre-box a, .album a {
+        display: block;
+        background-color: #ba5ca8;
+        color: rgb(255, 255, 255);
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 4px;
+        text-decoration: none;
+        transition: background-color 0.3s;
+    }
+
+    .genre-box a:hover, .album a:hover {
+        background-color:#f574b0;
+    }
+    
+        .clear-filters-btn, button {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        display: inline-block;
+        margin-top: 10px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-size: 1em;
+        width: 150px; 
+        text-align: center;
+       }
+        .clear-filters-btn:hover, button:hover {
+            background-color: #0056b3;
+        }
+    
+        form {
+            margin-bottom: 30px;
+        }
+    
+        input[type="text"], select {
+            padding: 10px;
+            margin-right: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 1em;
+        }
+        header {
+            background-color: #4cb69f;
+            color: white;
+            text-align: right;
+            padding: .5em 0;
+        }
+        footer {
+            background-color: #4cb69f;
+            color: white;
+            text-align: center;
+            padding: 0.5em 0; 
+            font-size: 0.8em; 
+        }
+
+    </style>
+    
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="containers">
+                <a href="{{ url_for('handle_creator_status') }}">Creator Account</a>
+                <a href="{{ url_for('view_playlists') }}">See Playlists</a>
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </nav>
+    </header>
+    <div class="welcome-message" style="text-align: center; margin-top: 20px;">
+        <h2>Welcome to Your Dashboard, {{ current_user.username }}</h2>
+    </div>
+    <main>
+        <form action="{{ url_for('user_dashboard') }}" method="get">
+            <label for="filter_type">Filter by:</label>
+            <select name="filter_type" id="filter_type">
+                <option value="">Select Filter</option>
+                <option value="title">Title</option>
+                <option value="rating">Rating</option>
+                <option value="artist">Artist</option>
+            </select>
+            <input type="text" name="filter_value" placeholder="Enter value for filter">
+            <button type="submit">Filter</button>
+            <form action="{{ url_for('user_dashboard') }}" method="get">
+                <button type="submit" class="clear-filters-btn">Clear Filters</button>
+            </form>
+        </form>
+        <!-- Filtered Songs Section -->
+        {% if filter_type %}
+            {% if songs %}
+                <h2>Filtered Songs</h2>
+                <ul>
+                    {% for song in songs %}
+                        <li><a href="{{ url_for('song_detail_copy', song_id=song.id) }}">{{ song.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No songs found.</p>
+            {% endif %}
+        {% endif %}
+
+        <h2>Recommended for You</h2>
+        {% if recommended_songs %}
+            <div class="songs-container">
+                {% for song in recommended_songs %}
+                    <div class="song-box">
+                        <img src="static\images\music thumbnail.png" alt="{{ song.title }} Thumbnail" class="song-thumbnail">
+                        <div class="song-title">
+                            <a href="{{ url_for('song_detail_copy', song_id=song.id) }}">{{ song.title }}</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No recommendations available.</p>
+        {% endif %}
+
+        <div class="genre-album-container">
+            <div class="genre-box">
+                <h2>Genres</h2>
+                <ul>
+                    {% for genre in genres %}
+                        <li><a href="{{ url_for('songs_by_genre', genre_id=genre.id) }}">{{ genre.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="album">
+                <h2>Albums</h2>
+                <ul>
+                    {% for album in albums %}
+                        <li><a href="{{ url_for('songs_by_album', album_id=album.id) }}">{{ album.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <div class="alert alert-info">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </main>
+
+    <footer>
+        <p>&copy; Thanks for using our application. Have a great leisure time!</p>
+        <br>please feel free to write us : srinandhini82@gmail.com for any support or issue.
+    </footer>
+</body>
+</html>

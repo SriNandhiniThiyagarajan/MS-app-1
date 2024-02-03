@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Creator Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; 
+        }
+        header {
+            background-color: #4cb69f;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+        }
+        .container {
+            text-align: center;
+            margin: auto;
+            width: 80%;
+            flex: 1;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0 10px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .stat-box {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px;
+            display: inline-block;
+            width: 150px;
+            text-align: center;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .flash-messages .alert {
+            background-color: #e7f3fe;
+            color: #e03140;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            text-align: center;
+        }
+        .create-album-link {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+        .create-album-link:hover {
+            background-color: #218838;
+            text-decoration: none;
+            color: white;
+        }
+        .containers{
+            text-align: right;
+            margin: auto;
+            width: 80%;
+        }
+        footer {
+            background-color: #4cb69f;
+            color: white;
+            text-align: center;
+            padding: 0.5em 0; 
+            font-size: 0.8em; 
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="containers">
+                <a href="{{ url_for('user_dashboard') }}">Home</a>
+                <a href="{{ url_for('upload_song') }}">Upload Songs</a>
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </nav>
+    </header><br>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="flash-messages">
+          {% for message in messages %}
+              <div class="alert alert-info">{{ message }}</div>
+          {% endfor %}
+      </div>
+     {% endif %}
+    {% endwith %}
+     <br><br>
+    <h1>Welcome to Creator Dashboard</h1>
+    <div class="container">
+        {% if album_count > 0 %}
+            <div class="stat-box">
+                <strong>Albums Created</strong>
+                <div>{{ album_count }}</div>
+            </div>
+            <div class="stat-box">
+                <strong>Songs Uploaded</strong>
+                <div>{{ song_count }}</div>
+            </div>
+        {% else %}
+            <p><h3>No records so far</h3></p>
+            <p><a href="{{ url_for('upload_song') }}" class="create-album-link">Wanna create new album?</a>.</p>
+        {% endif %}
+    </div>
+       <br><br><br><br><br>
+    <footer>
+        <p>&copy; Thanks for using our application. Have a great leisure time!</p>
+        <br>please feel free to write us : srinandhini82@gmail.com for any support or issue.
+    </footer>
+</body>
+</html>

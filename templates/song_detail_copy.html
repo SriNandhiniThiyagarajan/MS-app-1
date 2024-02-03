@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ song.title }}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+    
+        header, footer {
+            background-color: #4cb69f;
+            color: white;
+            text-align: right;
+            padding: .2em 0;
+        }
+        footer{
+            text-align: center;
+        }
+    
+        .containers {
+            text-align: right;
+            margin: auto;
+            width: 80%;
+        }
+    
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+    
+        nav a:hover {
+            background-color: #367c39;
+        }
+        .content audio {
+            width: 100%;
+            max-width: 400px;
+            margin-top: 20px;
+        }
+        .content {
+        padding: 30px;
+        width: 80%;
+        margin: 40px auto;
+        background-color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        text-align: center; 
+        display: flex;
+        flex-direction: column;
+        align-items: center; 
+       }
+
+       .content p {
+        font-size: 1.1em;
+        line-height: 1.8;
+        color: #333;
+        margin-bottom: 15px;
+        max-width: 600px;
+        text-align: left;
+      }
+        form {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+    
+        form label, form select, form button {
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+    
+        button, select {
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+    
+        button:hover {
+            background-color: #6fe77f;
+        }
+    
+        select {
+            background-color: white;
+            color: #333;
+        }
+    
+        .flash-messages p {
+            background-color: #e7f3fe;
+            color: #e03140;
+            padding: 5px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+    
+        footer p {
+            margin: 5px 0;
+        }
+    
+        @media (max-width: 768px) {
+            .content {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+    </style>
+    
+</head>
+<body>
+    <header>
+        <nav>
+            <div class = "containers">
+            <a href="{{ url_for('user_dashboard') }}">Home</a>
+            <a href="{{ url_for('handle_creator_status') }}">Creator Account</a>
+            <a href="{{ url_for('profile') }}">Profile</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="content">
+        <p><strong>Title:</strong> {{ song.title}}</p>
+        <p><strong>Singer:</strong> {{ song.artist }}</p>
+        <p><strong>Duration:</strong> {{ song.duration }} seconds</p>
+        <p><strong>Rating:</strong> {{ song.average_rating() }}/5</p>
+        <p><strong>Lyrics:</strong><br>{{ song.lyrics.replace('\n', '<br>') | safe }}</p>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="flash-messages">
+              {% for message in messages %}
+                  <p>{{ message }}</p>
+              {% endfor %}
+          </div>
+         {% endif %}
+        {% endwith %}
+        <audio controls autoplay muted>
+            <source src="song.filename " type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+
+        <form action="{{ url_for('rate_song', song_id=song.id) }}" method="post">
+            <label for="rating">Rate this song:</label>
+            <select name="rating" id="rating">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <button type="submit">Submit Rating</button>
+        </form><br>
+
+    </div>
+
+    <footer>
+        <p>&copy; Thanks for using our application. Have a great leisure time!</p>
+        <br>please feel free to write us : srinandhini82@gmail.com for any support or issue.
+    </footer>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to the Music Streaming App</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+        .background-image {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1; 
+            opacity: 0.5; 
+            background-size: cover;
+            background-position: center;
+        }
+        .content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding-top: 15%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        h1 {
+            color: #444;
+            margin-bottom: 20px;
+        }
+        .btn-custom {
+            padding: 15px 30px;
+            margin: 10px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            display: inline-block;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .btn-primary {
+            background-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        .btn-secondary:hover {
+            background-color: #545b62;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <img src="static\images\backgroudimg.png" class="background-image" alt="Background Image"> 
+
+    <div class="content">
+        <h1>Welcome to the Aurora Daisy</h1>
+        <a href="{{ url_for('login') }}" class="btn-custom btn-primary">Login</a> 
+        or
+        <a href="{{ url_for('register') }}" class="btn-custom btn-secondary">Register</a> 
+    </div>
+</body>
+</html>

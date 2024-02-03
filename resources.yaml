@@ -1,0 +1,301 @@
+title: "My Music Service API"
+api:
+  resources:
+    User:
+      path: "/users/<int:user_id>"
+      methods:
+        GET:
+          description: "Retrieve a user by ID"
+          parameters:
+            - name: user_id
+              in: path
+              required: true
+              type: integer
+        PUT:
+          description: "Update a user by ID"
+          parameters:
+            - name: user_id
+              in: path
+              required: true
+              type: integer
+            - name: username
+              in: body
+              required: true
+              type: string
+            - name: email
+              in: body
+              required: true
+              type: string
+            - name: password
+              in: body
+              required: false
+              type: string
+            - name: is_creator
+              in: body
+              required: false
+              type: boolean
+            - name: is_admin
+              in: body
+              required: false
+              type: boolean
+            - name: is_blacklisted
+              in: body
+              required: false
+              type: boolean
+
+    UserList:
+      path: "/users"
+      methods:
+        GET:
+          description: "Retrieve a list of users"
+        POST:
+          description: "Create a new user"
+          parameters:
+            - name: username
+              in: body
+              required: true
+              type: string
+            - name: email
+              in: body
+              required: true
+              type: string
+            - name: password
+              in: body
+              required: false
+              type: string
+            - name: is_creator
+              in: body
+              required: false
+              type: boolean
+            - name: is_admin
+              in: body
+              required: false
+              type: boolean
+            - name: is_blacklisted
+              in: body
+              required: false
+              type: boolean
+    Album:
+      path: "/albums/<int:album_id>"
+      methods:
+        GET:
+          description: "Retrieve an album by ID"
+          parameters:
+            - name: album_id
+              in: path
+              required: true
+              type: integer
+        DELETE:
+          description: "Delete an album by ID"
+          parameters:
+            - name: album_id
+              in: path
+              required: true
+              type: integer
+        PUT:
+          description: "Update an album by ID"
+          parameters:
+            - name: album_id
+              in: path
+              required: true
+              type: integer
+            - name: name
+              in: body
+              required: true
+              type: string
+            - name: release_date
+              in: body
+              required: false
+              type: string 
+            - name: genre_id
+              in: body
+              required: true
+              type: integer
+            - name: user_id
+              in: body
+              required: true
+              type: integer
+
+    AlbumList:
+      path: "/albums"
+      methods:
+        GET:
+          description: "Retrieve a list of albums"
+        POST:
+          description: "Create a new album"
+          parameters:
+            - name: name
+              in: body
+              required: true
+              type: string
+            - name: release_date
+              in: body
+              required: false
+              type: string 
+            - name: genre_id
+              in: body
+              required: true
+              type: integer
+            - name: user_id
+              in: body
+              required: true
+              type: integer
+    Song:
+      path: "/songs/<int:song_id>"
+      methods:
+        GET:
+          description: "Retrieve a song by ID"
+          parameters:
+            - name: song_id
+              in: path
+              required: true
+              type: integer
+        PUT:
+          description: "Update a song by ID"
+          parameters:
+            - name: song_id
+              in: path
+              required: true
+              type: integer
+            - name: title
+              in: body
+              required: true
+              type: string
+            - name: artist
+              in: body
+              required: true
+              type: string
+            - name: duration
+              in: body
+              required: false
+              type: float
+            - name: lyrics
+              in: body
+              required: false
+              type: string
+            - name: filename
+              in: body
+              required: true
+              type: string
+            - name: album_id
+              in: body
+              required: true
+              type: integer
+            - name: user_id
+              in: body
+              required: true
+              type: integer
+        DELETE:
+          description: "Delete a song by ID"
+          parameters:
+            - name: song_id
+              in: path
+              required: true
+              type: integer
+
+    SongList:
+      path: "/songs"
+      methods:
+        GET:
+          description: "Retrieve a list of songs"
+        POST:
+          description: "Create a new song"
+          parameters:
+            - name: title
+              in: body
+              required: true
+              type: string
+            - name: artist
+              in: body
+              required: true
+              type: string
+            - name: duration
+              in: body
+              required: false
+              type: float
+            - name: lyrics
+              in: body
+              required: false
+              type: string
+            - name: filename
+              in: body
+              required: true
+              type: string
+            - name: album_id
+              in: body
+              required: true
+              type: integer
+            - name: user_id
+    Playlist:
+      path: "/playlists/<int:playlist_id>"
+      methods:
+        GET:
+          description: "Retrieve a playlist by ID"
+          parameters:
+            - name: playlist_id
+              in: path
+              required: true
+              type: integer
+        PUT:
+          description: "Update a playlist by ID"
+          parameters:
+            - name: playlist_id
+              in: path
+              required: true
+              type: integer
+            - name: name
+              in: body
+              required: true
+              type: string
+        DELETE:
+          description: "Delete a playlist by ID"
+          parameters:
+            - name: playlist_id
+              in: path
+              required: true
+              type: integer
+
+    PlaylistList:
+      path: "/playlists"
+      methods:
+        GET:
+          description: "Retrieve a list of playlists"
+        POST:
+          description: "Create a new playlist"
+          parameters:
+            - name: name
+              in: body
+              required: true
+              type: string
+    PlaylistSong:
+      paths:
+        add_song:
+          path: "/playlists/<int:playlist_id>/songs"
+          methods:
+            POST:
+              description: "Add a song to a playlist"
+              parameters:
+                - name: playlist_id
+                  in: path
+                  required: true
+                  type: integer
+                - name: song_id
+                  in: body
+                  required: true
+                  type: integer
+        remove_song:
+          path: "/playlists/<int:playlist_id>/songs/<int:song_id>"
+          methods:
+            DELETE:
+              description: "Remove a song from a playlist"
+              parameters:
+                - name: playlist_id
+                  in: path
+                  required: true
+                  type: integer
+                - name: song_id
+                  in: path
+                  required: true
+                  type: integer
+
+

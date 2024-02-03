@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Playlist: {{ playlist.name }}</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+    
+        header, footer {
+            background-color: #4cb69f;
+            color: white;
+            text-align: right;
+            padding: .5em 0;
+        }
+    
+        .container {
+            width: 80%;
+            margin: auto;
+            text-align: center;
+        }
+    
+        nav a, .btn-link {
+            color: white;
+            text-decoration: none;
+            padding: 0 10px;
+        }
+    
+        nav a:hover, .btn-link:hover {
+            background-color: #218838;
+            text-decoration: underline;
+        }
+    
+        h1 {
+            text-align: center;
+            color: #333;
+            margin: 20px 0;
+        }
+    
+        .flash-messages p {
+            color: red;
+            text-align: center;
+        }
+    
+        .btn-link {
+        background-color: #28a745;
+        color: white;
+        padding: 4px 8%;
+        font-size: 0.8em; 
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        width: 150px;
+        text-align: center;
+    }
+
+
+        .back-link {
+            display: inline-block;
+            text-align: center;
+            margin-top: 20px;
+            background-color: #007bff;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-link:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+    
+        table {
+            width: 100%;
+            max-width: 800px; 
+            margin: 20px auto; 
+            border-collapse: collapse;
+        }
+    
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+    
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+    
+        th {
+            background-color: #4cb69f;
+            color: white;
+        }
+    
+        footer {
+            margin-top: auto;
+            padding: 1em 0;
+            background-color: #4cb69f;
+            color: white;
+            text-align: center;
+        }
+
+        p{
+            text-align: center;
+        }
+    </style>
+    
+</head>
+<body>
+    <header>
+        <nav>
+                <a href="{{ url_for('user_dashboard') }}">Home</a>
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+        </nav>
+    </header>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <h1>Playlist: {{ playlist.name }}</h1>
+        
+        {% if songs %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for song in songs %}
+                    <tr>
+                        <td>
+                            <a href="{{ url_for('song_detail_copy', song_id=song.id) }}">{{ song.title }}</a>
+                        </td>
+                        <td>
+                            <form action="{{ url_for('remove_song_from_playlist', playlist_id=playlist.id, song_id=song.id) }}" method="post">
+                                <button type="submit">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No songs added to this playlist.</p>
+        <center><a href="{{ url_for('add_songs_to_playlist', playlist_id=playlist.id) }}" class="btn-link">Click here to add songs</a></center>
+    {% endif %}
+    
+    <br><br>
+    <center>
+        <a href="{{ url_for('view_playlists') }}" class="back-link">Back to Playlists</a>
+    </center>
+    <br><br>
+    <footer>
+        <p>&copy; Thanks for using our application. Have a great leisure time!</p>
+        <br>please feel free to write us : srinandhini82@gmail.com for any support or issue.
+    </footer>
+</body>
+</html>

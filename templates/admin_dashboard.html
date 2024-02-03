@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header, footer {
+            background-color: #4cb69f;
+            color: whitesmoke;
+            text-align: center;
+            padding: 1em 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            text-align: right;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0 10px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            width: 60%;
+            margin: auto;
+        }
+        li {
+            background-color: white;
+            margin: 5px 0;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        form {
+            width: 40%;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .flash-messages {
+            text-align: center;
+        }
+        .flash-message {
+            color: red;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <a href="{{ url_for('manage_users') }}">View and Edit Users</a>
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </nav>
+    </header>
+
+    <h1>Admin Dashboard</h1>
+    <ul>
+        <li>Number of Normal Users: {{ normal_user_count }}</li>
+        <li>Number of Creators: {{ creator_count }}</li>
+        <li>Number of Tracks: {{ track_count }}</li>
+        <li>Number of Genres: {{ genre_count }}</li>
+        <li>Number of Albums: {{ album_count }}</li>
+    </ul>
+
+    <h2>Add New Genre</h2>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="flash-messages">
+            {% for message in messages %}
+                <div class="flash-message">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %} 
+    <form method="POST" action="{{ url_for('admin_dashboard') }}">
+        <label for="name">Genre Name:</label>
+        <input type="text" id="name" name="name" required>
+        <center><button type="submit">Add Genre</button></center>
+    </form><br>
+
+    <footer>
+        <p>&copy; Thanks for using our application. Have a great leisure time!</p>
+        <br>please feel free to write us : srinandhini82@gmail.com for any support or issue.
+    </footer>
+</body>
+</html>

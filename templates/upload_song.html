@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Songs and Create Album</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .container, main {
+            width: 80%;
+            margin: auto;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0 10px;
+        }
+        main {
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            flex: 1;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .flash-messages .alert {
+            background-color: #e7f3fe;
+            color: #e03140;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        footer {
+            background-color: #4cb69f;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+        header, footer {
+            background-color: #4cb69f;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+        }     
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .action-buttons form {
+            margin: 0 5px;
+        }
+        .action-buttons span {
+            margin: 0 5px;
+            color: #333;
+        }
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        .btn-success {
+            background-color: #28a745;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+        }
+        .containers{
+            text-align: right;
+            margin: auto;
+            width: 80%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="containers">
+                <a href="{{ url_for('user_dashboard') }}">Home</a>
+                <a href="{{ url_for('create_playlist') }}">Create Playlist</a>
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <h2>Create New Album</h2>
+        <form method="POST" action="{{ url_for('upload_song') }}">
+            <label for="albumName">Album Name:</label>
+            <input type="text" id="albumName" name="album_name" required>
+            <label for="genre">Genre:</label>
+            <select id="genre" name="genre_id" required>
+                {% for genre in genres %}
+                    <option value="{{ genre.id }}">{{ genre.name }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Create Album" class="btn btn-success">
+        </form><br>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <div class="alert alert-info">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <h1>Your Albums</h1>
+        {% if user_albums %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Album Name</th>
+                        <th>Release Date</th>
+                        <th>Genre</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for album in user_albums %}
+                        <tr>
+                            <td><a href="{{ url_for('album_songs', album_id=album.id) }}">{{ album.name }}</a></td>
+                            <td>{{ album.release_date.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ album.genre.name }}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <form action="{{ url_for('add_song', album_id=album.id) }}" method="get">
+                                        <button type="submit" class="btn btn-success">Add Songs</button>
+                                    </form>
+                                    <span>|</span>
+                                    <form action="{{ url_for('edit_album', album_id=album.id) }}" method="get">
+                                        <button type="submit" class="btn">Edit</button>
+                                    </form>
+                                    <span>|</span>
+                                    <form action="{{ url_for('delete_album', album_id=album.id) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this album?');">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>You have not created any albums yet.</p>
+        {% endif %}
+        <a href="{{ url_for('creator_dashboard') }}" class="btn">Go Back</a>
+    </main>
+    <footer>
+        <p>&copy; Thanks for using our application. Have a great leisure time!</p>
+        <br>please feel free to write us : srinandhini82@gmail.com for any support or issue.
+    </footer>
+</body>
+</html>

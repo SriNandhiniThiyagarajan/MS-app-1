@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Songs in {{ album.name }}</title>
+    <style>
+        html, body {
+            height: 100%; 
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+    
+        header, footer {
+            background-color: #4cb69f;
+            color: white;
+            text-align: center;
+            padding: .5em 0;
+        }
+    
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            min-height: calc(100% - 60px); 
+            position: relative;
+            padding-bottom: 60px; 
+        }
+    
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            text-align: center;
+        }
+    
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+    
+        th {
+            background-color: #4cb69f;
+            color: white;
+        }
+    
+        td {
+            background-color: #fff;
+        }
+    
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    
+        tr:hover {
+            background-color: #ddd;
+        }
+    
+        .play-button {
+            background-color: rgb(44, 201, 88);
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+    
+        .play-button:hover {
+            background-color: #0056b3; 
+        }
+    
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 60px;
+            background-color: #4cb69f;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+        }
+    
+        @media screen and (max-width: 600px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+    
+            thead tr {
+                display: none;
+            }
+    
+            td {
+                border: none;
+                position: relative;
+                padding-left: 50%;
+            }
+    
+            td:before {
+                position: absolute;
+                left: 6px;
+                top: 6px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+            }
+    
+            td:nth-of-type(1):before { content: "Song"; }
+            td:nth-of-type(2):before { content: "Action"; }
+        }
+    
+    </style>
+</head>
+<body>
+    <header>
+        <h2>Music Album Portal</h2>
+    </header>
+    <div class="container">
+        <h1>Songs in Album: {{ album.name }}</h1>
+        {% if songs %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Song</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for song in songs %}
+                        <tr>
+                            <td>{{ song.title }}</td>
+                            <td>
+                                <form action="{{ url_for('song_detail_copy', song_id=song.id) }}" method="get">
+                                    <button type="submit" class="play-button">Play</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No songs available in this album.</p>
+        {% endif %}
+    </div>    
+</body>
+</html>

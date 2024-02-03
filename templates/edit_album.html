@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Album</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header, footer {
+            background-color: #4cb69f;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+        }
+        .container, .flash-messages, h2, form {
+            width: 80%;
+            margin: auto;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0 10px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            width: 40%;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            width: fit-content;
+        }
+        input[type="submit"]:hover {
+            background-color: #218838;
+        }
+        .flash-messages p {
+            color: red;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .containers{
+            text-align: right;
+            margin: auto;
+            width: 80%;
+        }
+        .main-content {
+            flex: 1; 
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="containers">
+                <a href="{{ url_for('user_dashboard') }}">Home</a>
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </nav>
+    </header>
+    <br>
+    <br>
+    <div class="main-content">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <h2>Edit Album</h2>
+        <form method="POST" action="{{ url_for('edit_album', album_id=album.id) }}">
+            <label for="albumName">Album Name:</label>
+            <input type="text" id="albumName" name="album_name" value="{{ album.name }}" required>
+
+            <label for="genre">Genre:</label>
+            <select id="genre" name="genre_id" required>
+                {% for genre in genres %}
+                    <option value="{{ genre.id }}" {% if genre.id == album.genre_id %} selected {% endif %}>
+                        {{ genre.name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <input type="submit" value="Update Album">
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; Thanks for using our application. Have a great leisure time!</p>
+        <br>please feel free to write us : srinandhini82@gmail.com for any support or issue.
+    </footer>
+</body>
+</html>
